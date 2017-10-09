@@ -40,7 +40,7 @@ The output is intentionally modelled on the output of the Alteryx JSON Parse too
 
 Below is a simple XML document, including attributes for Bob and Charlie, and a mixed node for Bob...
 
-
+```
 <Employees>
   <Person>  
     <FirstName>Alice</FirstName>
@@ -67,11 +67,11 @@ Below is a simple XML document, including attributes for Bob and Charlie, and a 
     <PhoneNumber>0123 456 7891</PhoneNumber>
   </Person>
 </Employees>
-
+```
 
 This gets processed to ...
 
-
+```
  ------------------------------------------- -----------------
 | Path                                      | Value           |
  ------------------------------------------- -----------------
@@ -96,6 +96,7 @@ This gets processed to ...
 | /Employees/Person/3/Surname               | Cox             |
 | /Employees/Person/3/PhoneNumber           | 0123 456 7891   |
  ------------------------------------------- -----------------
+```
 
 
 Note that in the above example, the default delimiters are used.  This allows the attribute nickName for Robert ("The Bobster") to be differentiated from the child element NickName for Robert ("Bob").  You could change this and use the same delimiter, and the only consequence is that Path keys cease to be unique, you get two rows with the same path.  This may not effect your subsequent processing.  The point is, the output style is configurable.
