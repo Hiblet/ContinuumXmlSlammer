@@ -18,9 +18,9 @@ The app implements a tool that processes XML fields into record rows.  Each reco
 
 You will need Visual Studio 2017 (Community edition is free).  You will need Alteryx Designer.
 
-Download the repo and compile the project using Visual Studio 2017.  You should end up with a DLL in your debug and release folders.  
+Download the repo and compile the project using Visual Studio 2017.  You should end up with a DLL in your debug and release folders.  Contact me if you just want a copy of the DLL pre-compiled.
 
-Assuming you are using the default installation folder, copy the DLL to "C:\Program Files\Alteryx\bin\Plugins".  Alteryx will discover the plug in tool automatically.  The tool will then be found using the Alteryx Search function, and you should search for "XMLSlammer".  The logo is based on the Developer tool series logo (grey cog wheel).  The tool expects an inbound string of XML data.
+Assuming you are using the default installation folder, copy the DLL to "C:\Program Files\Alteryx\bin\Plugins".  Alteryx will discover the plug in tool automatically.  The tool will then be found using the Alteryx Search function, and you should search for "XMLSlammer".  The logo is based on the Developer tool series logo (grey cog wheel with Alteryx XML logo).  The tool expects an inbound string of XML data.
 
 
 
@@ -40,7 +40,13 @@ The output is intentionally modelled on the output of the Alteryx JSON Parse too
 
 Once you get to the stage where you have a compiled DLL, you are almost there.  If you do not want to get there, I can upload a copy of the compiled DLL to you on request, or email it, or whatever you like.
 
-The DLL is then copied to "C:\Program Files\Alteryx\bin\Plugins" on your local installation, and Alteryx will discover the DLL.  Once the DLL is in place, it will become available in the Search tool, as "XMLSlammer", and it will have a grey-cog-wheel icon with the Alteryx XML symbol "<~~~>" in the centre.
+The DLL is then copied to "C:\Program Files\Alteryx\bin\Plugins\ContinuumXMLSlammer" on your local installation.  
+
+Next, you need an INI file in "C:\Program Files\Alteryx\Settings\AdditionalPlugIns".  The INI file is included in this repo, so you can copy it to your local folder.  The INI file has the path info that Alteryx needs to find the DLL, and the ToolGroup that the tool should appear in, in this case "Developer".
+
+If you are not worried about putting the tool in a particular group, you can just copy the DLL to "C:\Program Files\Alteryx\bin\Plugins".  Once the DLL is there, it will become available in the Alteryx Designer Search tool, as "XMLSlammer".
+
+The tool will have a grey-cog-wheel icon with the Alteryx XML symbol "<~~~>" in the centre.
 
 
 
