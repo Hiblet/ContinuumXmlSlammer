@@ -36,6 +36,14 @@ The output is intentionally modelled on the output of the Alteryx JSON Parse too
 
 
 
+## Installation
+
+Once you get to the stage where you have a compiled DLL, you are almost there.  If you do not want to get there, I can upload a copy of the compiled DLL to you on request, or email it, or whatever you like.
+
+The DLL is then copied to "C:\Program Files\Alteryx\bin\Plugins" on your local installation, and Alteryx will discover the DLL.  Once the DLL is in place, it will become available in the Search tool, as "XMLSlammer", and it will have a grey-cog-wheel icon with the Alteryx XML symbol "<~~~>" in the centre.
+
+
+
 ## Example
 
 Below is a simple XML document, including attributes for Bob and Charlie, and a mixed node for Bob...
@@ -131,19 +139,19 @@ Each node may contain attributes.  Attributes are handled as if they were data c
 
 
 
-### Author
+## Author
 
 Steve Hibbert (steve at Continuum dot je), October 2017 (www.continuum.je)
 
 
 
-### License
+## License
 
 MIT License: Use as you see fit, give credit where applicable.
 
 
 
-### Credits and Acknowledgements
+## Credits and Acknowledgements
 
  - XML parsing: StackOverflow user Chaviero: https://stackoverflow.com/questions/451950/get-the-xpath-to-an-xelement
  - XML shallow value: M$ https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-retrieve-the-shallow-value-of-an-element
