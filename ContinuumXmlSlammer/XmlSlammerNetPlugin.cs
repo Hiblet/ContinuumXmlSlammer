@@ -93,6 +93,9 @@ namespace ContinuumXmlSlammer
         public bool II_Init(RecordInfo recordInfo)
         {
             _recordInfoIn = recordInfo;
+
+            prepRecordInfoOut();
+
             return true;
         }
 
@@ -118,20 +121,7 @@ namespace ContinuumXmlSlammer
             XDocument doc = XDocument.Parse(xmlText);
 
             // If we haven't already done so, set up the output RecordInfo to describe the output data.
-            if (_recordInfoOut == null)
-            {
-                // Create the schema of the output record
-                AlteryxRecordInfoNet.RecordInfo recordInfo = new AlteryxRecordInfoNet.RecordInfo();
-
-                recordInfo.AddField("Path", FieldType.E_FT_String, 4096, 0, "", ""); // Empty strings are source and description
-                recordInfo.AddField("Value", FieldType.E_FT_String, 1024, 0, "", "");
-
-                _recordInfoOut = recordInfo;
-
-                // Use the new RecordInfo object to initialize the PluginOutputConnectionHelper.
-                // The PluginOutputConnectionHelper can't be used until this step is performed.
-                _outputHelper.Init(_recordInfoOut, "Output", null, _xmlProperties);
-            }
+            prepRecordInfoOut();
 
             // Walk the XML input.
             // Create one output record for each hierachy level.
@@ -190,6 +180,24 @@ namespace ContinuumXmlSlammer
         {
         }
 
+
+        private void prepRecordInfoOut()
+        {
+            if (_recordInfoOut == null)
+            {
+                // Create the schema of the output record
+                AlteryxRecordInfoNet.RecordInfo recordInfo = new AlteryxRecordInfoNet.RecordInfo();
+
+                recordInfo.AddField("Path", FieldType.E_FT_String, 4096, 0, "", ""); // Empty strings are source and description
+                recordInfo.AddField("Value", FieldType.E_FT_String, 1024, 0, "", "");
+
+                _recordInfoOut = recordInfo;
+
+                // Use the new RecordInfo object to initialize the PluginOutputConnectionHelper.
+                // The PluginOutputConnectionHelper can't be used until this step is performed.
+                _outputHelper.Init(_recordInfoOut, "Output", null, _xmlProperties);
+            }
+        }
 
     }
 }
