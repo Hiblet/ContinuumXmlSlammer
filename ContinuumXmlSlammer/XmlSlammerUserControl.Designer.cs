@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.labelXmlSlammer = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.comboboxXmlSlammerField = new System.Windows.Forms.ComboBox();
@@ -39,7 +40,6 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.textboxXmlSlammerAttrDelim = new System.Windows.Forms.TextBox();
             this.labelXmlSlammerAttrDelim = new System.Windows.Forms.Label();
-            this.labelVersion = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -54,6 +54,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(300, 50);
             this.panel1.TabIndex = 0;
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(158, 22);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(46, 13);
+            this.labelVersion.TabIndex = 1;
+            this.labelVersion.Text = "(v 1.0.2)";
             // 
             // labelXmlSlammer
             // 
@@ -142,15 +151,6 @@
             this.labelXmlSlammerAttrDelim.Size = new System.Drawing.Size(69, 13);
             this.labelXmlSlammerAttrDelim.TabIndex = 0;
             this.labelXmlSlammerAttrDelim.Text = "Attr Delimiter:";
-            // 
-            // labelVersion
-            // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(158, 22);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(46, 13);
-            this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "(v 1.0.1)";
             // 
             // XmlSlammerUserControl
             // 

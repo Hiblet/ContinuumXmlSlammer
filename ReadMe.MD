@@ -156,6 +156,13 @@ Steve Hibbert (steve at Continuum dot je), October 2017 (www.continuum.je)
 MIT License: Use as you see fit, give credit where applicable.
 
 
+## Updates
+
+### V 1.0.1: Alpha Release.
+
+### V 1.0.2: Fixed XML Config bug where Key names were not correct.
+
+
 
 ## Credits and Acknowledgements
 

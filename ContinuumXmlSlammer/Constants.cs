@@ -8,9 +8,10 @@ namespace ContinuumXmlSlammer
 {
     public class Constants
     {
-        public static string SELECTEDFIELDKEY = "XmlSlammerSelectedField";
-        public static string PATHDELIMITERKEY = "XmlSlammerPathDelimiter";
-        public static string ATTRDELIMITERKEY = "XmlSlammerAttrDelimiter";
-        public static string FIELDNAMESKEY = "XmlSlammerFieldNames";
+        // NOTE: THESE STRINGS SHOULD MATCH THE ACCESSORS IN XmlInputConfiguration.cs
+        public static string SELECTEDFIELDKEY = "SelectedField";
+        public static string PATHDELIMITERKEY = "PathDelimiter";
+        public static string ATTRDELIMITERKEY = "AttrDelimiter";
+        public static string FIELDNAMESKEY = "FieldNames";
     }
 }
