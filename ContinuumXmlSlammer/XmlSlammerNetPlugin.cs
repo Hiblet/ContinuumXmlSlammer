@@ -22,6 +22,8 @@ namespace ContinuumXmlSlammer
         private RecordInfo _recordInfoIn;
         private RecordInfo _recordInfoOut;
 
+        private RecordCopier _recordCopier;
+
         private string _selectedField;
         private string _pathDelimiter = "/";
         private string _attrDelimiter = ".";
@@ -94,7 +96,7 @@ namespace ContinuumXmlSlammer
         {
             _recordInfoIn = recordInfo;
 
-            prepRecordInfoOut();
+            prep();
 
             return true;
         }
@@ -103,7 +105,7 @@ namespace ContinuumXmlSlammer
         // Receive an inbound record and process it.
         // Information about the record is held in the recordInfo object
         // that was passed in to II_Init(), and (hopefully) cached.
-        public bool II_PushRecord(AlteryxRecordInfoNet.RecordData pRecord)
+        public bool II_PushRecord(AlteryxRecordInfoNet.RecordData recordDataIn)
         {
             // If we have no selected field, we can't continue.
             if (string.IsNullOrWhiteSpace(_selectedField)) return false;
@@ -115,13 +117,13 @@ namespace ContinuumXmlSlammer
             if (xmlFieldBase == null) return false;
 
             // Get the XML data from the current record.
-            string xmlText = xmlFieldBase.GetAsString(pRecord);
+            string xmlText = xmlFieldBase.GetAsString(recordDataIn);
 
             // Load XML doc
             XDocument doc = XDocument.Parse(xmlText);
 
             // If we haven't already done so, set up the output RecordInfo to describe the output data.
-            prepRecordInfoOut();
+            //prepRecordInfoOut();
 
             // Walk the XML input.
             // Create one output record for each hierachy level.
@@ -132,31 +134,37 @@ namespace ContinuumXmlSlammer
                 string xPath = xElement.GetAbsoluteXPath(_pathDelimiter); // The xml hierachy path
                 string textContent = xElement.ShallowValue().Trim(); // Value in the text node
 
-                pushRecord(xPath, textContent);
+                pushRecord(xPath, textContent, recordDataIn);
 
                 foreach (XAttribute xAttribute in xElement.Attributes())
                 {
                     string xPathAndAttribute = xPath + _attrDelimiter + xAttribute.Name;
                     string attrContent = xAttribute.Value;
 
-                    pushRecord(xPathAndAttribute, attrContent);
+                    pushRecord(xPathAndAttribute, attrContent, recordDataIn);
                 }
             }
 
             return true;
         }
 
-        private void pushRecord(string path, string value)
+        private void pushRecord(string path, string value, RecordData recordDataIn)
         {
             Record recordOut = _recordInfoOut.CreateRecord();
             recordOut.Reset();
 
+            _recordCopier.Copy(recordOut, recordDataIn);
+
+            var outFieldCount = _recordInfoOut.NumFields();
+            int indexPathField = (int)outFieldCount - 2;
+            int indexValueField = (int)outFieldCount - 1;
+
             // Path Field
-            FieldBase fieldBase = _recordInfoOut[0];
+            FieldBase fieldBase = _recordInfoOut[indexPathField];
             fieldBase.SetFromString(recordOut, path);
 
             // Value Field
-            fieldBase = _recordInfoOut[1];
+            fieldBase = _recordInfoOut[indexValueField];
             fieldBase.SetFromString(recordOut, value);
 
             _outputHelper.PushRecord(recordOut.GetRecord());
@@ -180,24 +188,59 @@ namespace ContinuumXmlSlammer
         {
         }
 
-
-        private void prepRecordInfoOut()
+        private void prep()
         {
-            if (_recordInfoOut == null)
+            // Exit if already done (safety)
+            if (_recordInfoOut != null)
+                return;
+
+            _recordInfoOut = new AlteryxRecordInfoNet.RecordInfo();
+
+            populateRecordInfoOut();
+
+            _recordCopier = new RecordCopier(_recordInfoOut, _recordInfoIn, true);
+
+            uint countFields = _recordInfoIn.NumFields();
+            for (int i = 0; i < countFields; ++i)
             {
-                // Create the schema of the output record
-                AlteryxRecordInfoNet.RecordInfo recordInfo = new AlteryxRecordInfoNet.RecordInfo();
+                var fieldName = _recordInfoIn[i].GetFieldName();
 
-                recordInfo.AddField("Path", FieldType.E_FT_String, 4096, 0, "", ""); // Empty strings are source and description
-                recordInfo.AddField("Value", FieldType.E_FT_String, 1024, 0, "", "");
+                var newFieldNum = _recordInfoOut.GetFieldNum(fieldName, false);
+                if (newFieldNum == -1)
+                    continue;
 
-                _recordInfoOut = recordInfo;
-
-                // Use the new RecordInfo object to initialize the PluginOutputConnectionHelper.
-                // The PluginOutputConnectionHelper can't be used until this step is performed.
-                _outputHelper.Init(_recordInfoOut, "Output", null, _xmlProperties);
+                _recordCopier.Add(newFieldNum, i);
             }
+
+            _recordCopier.DoneAdding();
+
+            _outputHelper.Init(_recordInfoOut, "Output", null, _xmlProperties);
         }
+
+        private void populateRecordInfoOut()
+        {
+            _recordInfoOut = new AlteryxRecordInfoNet.RecordInfo();
+
+            // Copy the fieldbase structure of the incoming record
+            uint countFields = _recordInfoIn.NumFields();
+            for (int i = 0; i < countFields; ++i)
+            {
+                FieldBase fbIn = _recordInfoIn[i];
+                var currentFieldName = fbIn.GetFieldName();
+
+                // Do not include the source data (selectedField) in the output 
+                if (!String.Equals(currentFieldName, _selectedField, StringComparison.OrdinalIgnoreCase))
+                {
+                    _recordInfoOut.AddField(currentFieldName, fbIn.FieldType, (int)fbIn.Size, fbIn.Scale, fbIn.GetSource(), fbIn.GetDescription());
+                }
+            }
+
+            // Add the output columns at the end
+            _recordInfoOut.AddField("Path", FieldType.E_FT_V_WString, Constants.LARGEOUTPUTFIELDSIZE, 0, "", ""); // Empty strings are source and description
+            _recordInfoOut.AddField("Value", FieldType.E_FT_V_WString, Constants.LARGEOUTPUTFIELDSIZE, 0, "", "");
+        }
+
+
 
     }
 }

@@ -62,7 +62,7 @@
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(46, 13);
             this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "(v 1.0.2)";
+            this.labelVersion.Text = "(v 1.1.0)";
             // 
             // labelXmlSlammer
             // 

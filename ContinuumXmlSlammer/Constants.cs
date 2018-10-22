@@ -13,5 +13,8 @@ namespace ContinuumXmlSlammer
         public static string PATHDELIMITERKEY = "PathDelimiter";
         public static string ATTRDELIMITERKEY = "AttrDelimiter";
         public static string FIELDNAMESKEY = "FieldNames";
+
+        public static int LARGEOUTPUTFIELDSIZE = Int32.MaxValue;
+        public static int SMALLOUTPUTFIELDSIZE = 512;
     }
 }

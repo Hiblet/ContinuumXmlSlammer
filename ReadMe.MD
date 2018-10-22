@@ -158,9 +158,14 @@ MIT License: Use as you see fit, give credit where applicable.
 
 ## Updates
 
-### V 1.0.1: Alpha Release.
+### V 1.0.1
+Alpha Release.
 
-### V 1.0.2: Fixed XML Config bug where Key names were not correct.
+### V 1.0.2
+Fixed XML Config bug where Key names were not correct.
+
+### V 1.1.0 Updated 22-OCT-2018
+Record copy procedure updated to allow all record types through.  Additional fields (ie unused non-XML fields) are now propagated through the tool.
 
 
 
@@ -168,4 +173,4 @@ MIT License: Use as you see fit, give credit where applicable.
 
  - XML parsing: StackOverflow user Chaviero: https://stackoverflow.com/questions/451950/get-the-xpath-to-an-xelement
  - XML shallow value: M$ https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-retrieve-the-shallow-value-of-an-element
- - Assistance and guidance: James Dunkerley - Alteryx Ace
+ - Assistance and guidance: James Dunkerley - Alteryx Ace, total guru.
