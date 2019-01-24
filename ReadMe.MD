@@ -50,6 +50,21 @@ The tool will have a grey-cog-wheel icon with the Alteryx XML symbol "<~~~>" in 
 
 
 
+## Loading an XML File to a String Field
+
+This tool expects the XML document to be represented as a single string.  Often you will have a XML file, with one XML element per line.
+
+ - Bring an InputData tool onto the canvas and select your XML file.
+ - Change the "2 FileFormat" setting in the InputData tool config to "Comma Delimited Text Files (*.csv)" .
+ - Change the "6 First Row Contains Field Names" setting so that it is not checked.
+ - Change the "7 Field Length" setting to be a large value like 1000 (to avoid record truncation).
+ - Refresh, and you should have a Field_1 column, with one XML element per record.
+ - Bring a Summarize tool onto the canvas and connect it to your InputData tool.
+ - Configure the Summarize tool to add Field_1 with the String Concat action, and (!crucially!) remove the Separator comma.
+ - Pop a Browse tool on view the Summarize output, and you should have only the Concat_Field_1 column, one record, and that record holds a string representation of your XML file, which can now be used by XMLSlammer.
+
+
+
 ## Example
 
 Below is a simple XML document, including attributes for Bob and Charlie, and a mixed node for Bob...
