@@ -185,6 +185,9 @@ Record copy procedure updated to allow all record types through.  Additional fie
 ### V 1.1.1 (Updated 07-MAY-2019)
 Fixed problem where, if namespace was present but empty, a colon was added to each element separator.  Now the colon is only added if required, by checking for nullness.
 
+### V 1.2.0 (Updated 07-MAY-2019 also)
+Added checkbox to allow the choice to index repeating groups, or not.
+
 
 
 ## Credits and Acknowledgements

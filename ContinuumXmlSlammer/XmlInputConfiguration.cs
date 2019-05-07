@@ -9,74 +9,63 @@ namespace ContinuumXmlSlammer
 {
     public class XmlInputConfiguration
     {
-        public string FieldNames { get; private set; }
         public string SelectedField { get; private set; }
         public string PathDelimiter { get; private set; }
         public string AttrDelimiter { get; private set; }
+        public string FieldNames { get; private set; }
+        public string IndexGroups { get; private set; }
 
         // Note that the constructor is private.  Instances are created through the LoadFromConfigration method.
-        private XmlInputConfiguration(string selectedField, string pathDelimiter, string attrDelimiter, string fieldNames)
+        private XmlInputConfiguration(
+            string selectedField, 
+            string pathDelimiter, 
+            string attrDelimiter, 
+            string fieldNames,
+            string indexGroups)
         {
             SelectedField = selectedField;
             PathDelimiter = pathDelimiter;
             AttrDelimiter = attrDelimiter;
             FieldNames = fieldNames;
+            IndexGroups = indexGroups;
         }
 
         public static XmlInputConfiguration LoadFromConfiguration(XmlElement eConfig)
         {
-            string pathDelimiter = "/";
-            string attrDelimiter = ".";
-            string selectedField = "DownloadData";
-            string fieldNames = "";
+            string pathDelimiter = getStringFromConfig(eConfig, Constants.PATHDELIMITERKEY, Constants.DEFAULTPATHDELIMITER);
+            string attrDelimiter = getStringFromConfig(eConfig, Constants.ATTRDELIMITERKEY, Constants.DEFAULTATTRDELIMITER);
+            string selectedField = getStringFromConfig(eConfig, Constants.SELECTEDFIELDKEY, Constants.DEFAULTSELECTEDFIELD);
+            string fieldNames = getStringFromConfig(eConfig, Constants.FIELDNAMESKEY, Constants.DEFAULTFIELDNAMES);
+            string indexGroups = getStringFromConfig(eConfig, Constants.INDEXGROUPSKEY, Constants.DEFAULTINDEXGROUPS);
 
-            // Get the saved pathDelimiter string
-            XmlElement xmlElement = eConfig.SelectSingleNode(Constants.PATHDELIMITERKEY) as XmlElement;
-
-            if (xmlElement != null)
-            {
-                if (!string.IsNullOrEmpty(xmlElement.InnerText))
-                {
-                    // We path have a Delimiter element and it contains text
-                    pathDelimiter = xmlElement.InnerText;
-                }
-            }
-
-
-            // Get the saved attrDelimiter string
-            xmlElement = eConfig.SelectSingleNode(Constants.ATTRDELIMITERKEY) as XmlElement;
-            if (xmlElement != null)
-            {
-                if (!string.IsNullOrEmpty(xmlElement.InnerText))
-                {
-                    attrDelimiter = xmlElement.InnerText;
-                }
-            }
-
-
-            // Get the saved SelectedField string
-            xmlElement = eConfig.SelectSingleNode(Constants.SELECTEDFIELDKEY) as XmlElement;
-
-            if (xmlElement != null)
-            {
-                if (!string.IsNullOrWhiteSpace(xmlElement.InnerText))
-                {
-                    selectedField = xmlElement.InnerText;
-                }
-            }
-
-            // Get the saved FieldNames string
-            xmlElement = eConfig.SelectSingleNode(Constants.FIELDNAMESKEY) as XmlElement;
-
-            if (xmlElement != null)
-            {
-                if (!string.IsNullOrWhiteSpace(xmlElement.InnerText))
-                {
-                    fieldNames = xmlElement.InnerText;
-                }
-            }
-
-            return new XmlInputConfiguration(selectedField, pathDelimiter, attrDelimiter, fieldNames);
+            return new XmlInputConfiguration(
+                selectedField, 
+                pathDelimiter, 
+                attrDelimiter, 
+                fieldNames, 
+                indexGroups);
         }
+
+        public static string getStringFromConfig(XmlElement eConfig, string key, string valueDefault)
+        {
+            string sReturn = valueDefault;
+
+            XmlElement xe = eConfig.SelectSingleNode(key) as XmlElement;
+            if (xe != null)
+            {
+                if (!string.IsNullOrEmpty(xe.InnerText))
+                    sReturn = xe.InnerText;
+            }
+
+            return sReturn;
+        }
+
+        // Property Name Accessor
+        public object this[string propertyName]
+        {
+            get { return this.GetType().GetProperty(propertyName).GetValue(this, null); }
+            set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
+        }
+
     }
 }

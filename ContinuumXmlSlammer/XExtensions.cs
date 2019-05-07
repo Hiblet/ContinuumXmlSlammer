@@ -24,7 +24,7 @@ namespace ContinuumXmlSlammer
         /// Get the absolute XPath to a given XElement, including the namespace.
         /// (e.g. "/a:people/b:person[6]/c:name[1]/d:last[1]").
         /// </summary>
-        public static string GetAbsoluteXPath(this XElement element, string delimiter="/")
+        public static string GetAbsoluteXPath(this XElement element, bool indexGroups, string delimiter="/")
         {
             if (element == null)
             {
@@ -51,11 +51,17 @@ namespace ContinuumXmlSlammer
                         namespacePrefix + ":" + e.Name.LocalName;
                 }
 
-                // If the element is the root or has no sibling elements, no index is required
-                return ((index == -1) || (index == -2)) ?
-                    delimiter + name :
-                    delimiter + name + delimiter + index.ToString();
-                    
+                // If the element is the root or has no sibling elements, no index is required.
+                // Additionally, only add an index if the flag is set.
+                if (indexGroups)
+                {
+                    return ((index == -1) || (index == -2)) ?
+                        delimiter + name :
+                        delimiter + name + delimiter + index.ToString();
+                }
+                else                
+                    return delimiter + name;
+                
             };
 
             var ancestors = from e in element.Ancestors() select relativeXPath(e);

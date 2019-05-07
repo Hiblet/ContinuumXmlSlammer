@@ -40,10 +40,14 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.textboxXmlSlammerAttrDelim = new System.Windows.Forms.TextBox();
             this.labelXmlSlammerAttrDelim = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.labelXmlSlammerIndexGroups = new System.Windows.Forms.Label();
+            this.checkBoxIndexGroups = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -62,7 +66,7 @@
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(46, 13);
             this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "(v 1.1.1)";
+            this.labelVersion.Text = "(v 1.2.0)";
             // 
             // labelXmlSlammer
             // 
@@ -152,16 +156,44 @@
             this.labelXmlSlammerAttrDelim.TabIndex = 0;
             this.labelXmlSlammerAttrDelim.Text = "Attr Delimiter:";
             // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.checkBoxIndexGroups);
+            this.panel5.Controls.Add(this.labelXmlSlammerIndexGroups);
+            this.panel5.Location = new System.Drawing.Point(0, 200);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(300, 50);
+            this.panel5.TabIndex = 4;
+            // 
+            // labelXmlSlammerIndexGroups
+            // 
+            this.labelXmlSlammerIndexGroups.AutoSize = true;
+            this.labelXmlSlammerIndexGroups.Location = new System.Drawing.Point(8, 19);
+            this.labelXmlSlammerIndexGroups.Name = "labelXmlSlammerIndexGroups";
+            this.labelXmlSlammerIndexGroups.Size = new System.Drawing.Size(73, 13);
+            this.labelXmlSlammerIndexGroups.TabIndex = 0;
+            this.labelXmlSlammerIndexGroups.Text = "Index Groups:";
+            // 
+            // checkBoxIndexGroups
+            // 
+            this.checkBoxIndexGroups.AutoSize = true;
+            this.checkBoxIndexGroups.Location = new System.Drawing.Point(90, 19);
+            this.checkBoxIndexGroups.Name = "checkBoxIndexGroups";
+            this.checkBoxIndexGroups.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxIndexGroups.TabIndex = 1;
+            this.checkBoxIndexGroups.UseVisualStyleBackColor = true;
+            // 
             // XmlSlammerUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "XmlSlammerUserControl";
-            this.Size = new System.Drawing.Size(300, 200);
+            this.Size = new System.Drawing.Size(300, 250);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -170,6 +202,8 @@
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -188,5 +222,8 @@
         private System.Windows.Forms.TextBox textboxXmlSlammerAttrDelim;
         private System.Windows.Forms.Label labelXmlSlammerAttrDelim;
         private System.Windows.Forms.Label labelVersion;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.CheckBox checkBoxIndexGroups;
+        private System.Windows.Forms.Label labelXmlSlammerIndexGroups;
     }
 }
