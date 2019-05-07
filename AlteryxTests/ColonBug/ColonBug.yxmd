@@ -7,9 +7,10 @@
       </GuiSettings>
       <Properties>
         <Configuration>
+          <IndexGroups>Y</IndexGroups>
           <FieldNames>Field_1</FieldNames>
           <SelectedField>Field_1</SelectedField>
-          <PathDelimiter>\</PathDelimiter>
+          <PathDelimiter>!</PathDelimiter>
           <AttrDelimiter>.</AttrDelimiter>
         </Configuration>
         <Annotation DisplayMode="0">

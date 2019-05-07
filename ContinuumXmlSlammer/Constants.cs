@@ -12,7 +12,15 @@ namespace ContinuumXmlSlammer
         public static string SELECTEDFIELDKEY = "SelectedField";
         public static string PATHDELIMITERKEY = "PathDelimiter";
         public static string ATTRDELIMITERKEY = "AttrDelimiter";
-        public static string FIELDNAMESKEY = "FieldNames";
+        public static string FIELDNAMESKEY = "FieldNames"; // Last seen field
+        public static string INDEXGROUPSKEY = "IndexGroups";
+
+        // Default Values
+        public static string DEFAULTINDEXGROUPS = "Y";
+        public static string DEFAULTPATHDELIMITER = "/";
+        public static string DEFAULTATTRDELIMITER = ".";
+        public static string DEFAULTSELECTEDFIELD = "Field_1";
+        public static string DEFAULTFIELDNAMES = "Field_1";
 
         public static int LARGEOUTPUTFIELDSIZE = Int32.MaxValue;
         public static int SMALLOUTPUTFIELDSIZE = 512;

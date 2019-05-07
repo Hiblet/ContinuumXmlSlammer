@@ -100,6 +100,14 @@ namespace ContinuumXmlSlammer
             // Update the Attribute textbox.
             textboxXmlSlammerAttrDelim.Text = xmlConfig.AttrDelimiter;
 
+
+            /////////////
+            // CHECKBOX
+            //
+
+            setCheckbox(checkBoxIndexGroups, xmlConfig, Constants.INDEXGROUPSKEY, eIncomingMetaInfo);
+
+
             return this;
         }
 
@@ -115,6 +123,8 @@ namespace ContinuumXmlSlammer
 
         public void SaveResultsToXml(XmlElement eConfig, out string strDefaultAnnotation)
         {
+            saveSubForCheckbox(checkBoxIndexGroups, eConfig, Constants.INDEXGROUPSKEY, Constants.DEFAULTINDEXGROUPS);
+
             XmlElement xmlElementFieldNames = XmlHelpers.GetOrCreateChildNode(eConfig, Constants.FIELDNAMESKEY);
             List<string> fieldNames = new List<string>();
             foreach (var item in comboboxXmlSlammerField.Items)
@@ -136,6 +146,34 @@ namespace ContinuumXmlSlammer
 
             // Set the default annotation to be the name of the xml file.
             strDefaultAnnotation = "XML Slammer";
+        }
+
+        private void setCheckbox(CheckBox cb, XmlInputConfiguration xmlConfig, string key, XmlElement[] eIncomingMetaInfo)
+        {
+            string setting = (string)xmlConfig[key] ?? Constants.DEFAULTINDEXGROUPS; // Get the data held in the config (Y/N)
+
+            if (isTrueString(setting))
+                cb.Checked = true;
+            else
+                cb.Checked = false;
+        }
+
+        private bool isTrueString(string setting)
+        {
+            if (String.Equals(setting, "Y", StringComparison.OrdinalIgnoreCase)) return true;
+            if (String.Equals(setting, "1", StringComparison.OrdinalIgnoreCase)) return true;
+            if (String.Equals(setting, "true", StringComparison.OrdinalIgnoreCase)) return true;
+
+            return false;
+        }
+
+        private void saveSubForCheckbox(CheckBox cb, XmlElement eConfig, string key, string valueDefault)
+        {
+            XmlElement xe = XmlHelpers.GetOrCreateChildNode(eConfig, key);
+            if (cb.Checked == true)
+                xe.InnerText = "Y";
+            else
+                xe.InnerText = "N";
         }
     }
 }

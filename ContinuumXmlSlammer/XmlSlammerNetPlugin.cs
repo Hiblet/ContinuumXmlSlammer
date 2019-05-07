@@ -24,9 +24,12 @@ namespace ContinuumXmlSlammer
 
         private RecordCopier _recordCopier;
 
-        private string _selectedField;
-        private string _pathDelimiter = "/";
-        private string _attrDelimiter = ".";
+
+        private string _selectedField = Constants.DEFAULTSELECTEDFIELD;
+        private string _pathDelimiter = Constants.DEFAULTPATHDELIMITER;
+        private string _attrDelimiter = Constants.DEFAULTATTRDELIMITER;
+        private string _sIndexGroups = Constants.DEFAULTINDEXGROUPS;
+        private bool _indexGroups = true;
 
 
 
@@ -42,17 +45,13 @@ namespace ContinuumXmlSlammer
             XmlElement configElement = XmlHelpers.GetFirstChildByName(_xmlProperties, "Configuration", true);
             if (configElement != null)
             {
-                XmlElement selectedFieldElement = XmlHelpers.GetFirstChildByName(configElement, Constants.SELECTEDFIELDKEY, false);
-                if (selectedFieldElement != null)
-                    _selectedField = selectedFieldElement.InnerText;
+                getConfigSetting(configElement, Constants.SELECTEDFIELDKEY, ref _selectedField);
+                getConfigSetting(configElement, Constants.PATHDELIMITERKEY, ref _pathDelimiter);
+                getConfigSetting(configElement, Constants.ATTRDELIMITERKEY, ref _attrDelimiter);
 
-                XmlElement pathDelimiterElement = XmlHelpers.GetFirstChildByName(configElement, Constants.PATHDELIMITERKEY, false);
-                if (pathDelimiterElement != null)
-                    _pathDelimiter = pathDelimiterElement.InnerText;
+                getConfigSetting(configElement, Constants.INDEXGROUPSKEY, ref _sIndexGroups);
+                _indexGroups = isTrueString(_sIndexGroups);
 
-                XmlElement attrDelimiterElement = XmlHelpers.GetFirstChildByName(configElement, Constants.ATTRDELIMITERKEY, false);
-                if (attrDelimiterElement != null)
-                    _attrDelimiter = attrDelimiterElement.InnerText;
             }
 
             _outputHelper = new PluginOutputConnectionHelper(_toolID, _engineInterface);
@@ -131,7 +130,7 @@ namespace ContinuumXmlSlammer
 
             foreach (var xElement in doc.Root.DescendantsAndSelf())
             {
-                string xPath = xElement.GetAbsoluteXPath(_pathDelimiter); // The xml hierachy path
+                string xPath = xElement.GetAbsoluteXPath(_indexGroups, _pathDelimiter); // The xml hierachy path
                 string textContent = xElement.ShallowValue().Trim(); // Value in the text node
 
                 pushRecord(xPath, textContent, recordDataIn);
@@ -241,6 +240,33 @@ namespace ContinuumXmlSlammer
         }
 
 
+        //////////// 
+        // HELPERS
+
+        private void getConfigSetting(XmlElement configElement, string key, ref string memberToSet)
+        {
+            XmlElement xe = XmlHelpers.GetFirstChildByName(configElement, key, false);
+            if (xe != null)
+            {
+                if (!string.IsNullOrWhiteSpace(xe.InnerText))
+                    memberToSet = xe.InnerText;
+            }
+        }
+
+        public static bool isTrueString(string target)
+        {
+            string cleanTarget = target.Trim().ToUpper();
+            switch (cleanTarget)
+            {
+                case "Y":
+                case "TRUE":
+                case "1":
+                    return true;
+                default:
+                    break;
+            }
+            return false;
+        }
 
     }
 }
