@@ -179,8 +179,11 @@ Alpha Release.
 ### V 1.0.2
 Fixed XML Config bug where Key names were not correct.
 
-### V 1.1.0 Updated 22-OCT-2018
+### V 1.1.0 (Updated 22-OCT-2018)
 Record copy procedure updated to allow all record types through.  Additional fields (ie unused non-XML fields) are now propagated through the tool.
+
+### V 1.1.1 (Updated 07-MAY-2019)
+Fixed problem where, if namespace was present but empty, a colon was added to each element separator.  Now the colon is only added if required, by checking for nullness.
 
 
 
