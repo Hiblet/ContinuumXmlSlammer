@@ -44,9 +44,11 @@ namespace ContinuumXmlSlammer
                 }
                 else
                 {
-                    //name = "*[local-name()='" + e.Name.LocalName + "']";
                     string namespacePrefix = e.GetPrefixOfNamespace(currentNamespace);
-                    name = namespacePrefix + ":" + e.Name.LocalName;
+
+                    name = String.IsNullOrEmpty(namespacePrefix) ?
+                        e.Name.LocalName :
+                        namespacePrefix + ":" + e.Name.LocalName;
                 }
 
                 // If the element is the root or has no sibling elements, no index is required
