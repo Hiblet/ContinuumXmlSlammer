@@ -188,6 +188,10 @@ Fixed problem where, if namespace was present but empty, a colon was added to ea
 ### V 1.2.0 (Updated 07-MAY-2019 also)
 Added checkbox to allow the choice to index repeating groups, or not.
 
+### V 1.2.1 (Updated 18-JUL-2019)
+Diagnostic messaging elements added for Debug mode.  Should not effect functionality.
+
+
 
 
 ## Credits and Acknowledgements
