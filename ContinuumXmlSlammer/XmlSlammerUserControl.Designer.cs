@@ -41,8 +41,8 @@
             this.textboxXmlSlammerAttrDelim = new System.Windows.Forms.TextBox();
             this.labelXmlSlammerAttrDelim = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.labelXmlSlammerIndexGroups = new System.Windows.Forms.Label();
             this.checkBoxIndexGroups = new System.Windows.Forms.CheckBox();
+            this.labelXmlSlammerIndexGroups = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -66,7 +66,7 @@
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(46, 13);
             this.labelVersion.TabIndex = 1;
-            this.labelVersion.Text = "(v 1.2.0)";
+            this.labelVersion.Text = "(v 1.2.1)";
             // 
             // labelXmlSlammer
             // 
@@ -165,15 +165,6 @@
             this.panel5.Size = new System.Drawing.Size(300, 50);
             this.panel5.TabIndex = 4;
             // 
-            // labelXmlSlammerIndexGroups
-            // 
-            this.labelXmlSlammerIndexGroups.AutoSize = true;
-            this.labelXmlSlammerIndexGroups.Location = new System.Drawing.Point(8, 19);
-            this.labelXmlSlammerIndexGroups.Name = "labelXmlSlammerIndexGroups";
-            this.labelXmlSlammerIndexGroups.Size = new System.Drawing.Size(73, 13);
-            this.labelXmlSlammerIndexGroups.TabIndex = 0;
-            this.labelXmlSlammerIndexGroups.Text = "Index Groups:";
-            // 
             // checkBoxIndexGroups
             // 
             this.checkBoxIndexGroups.AutoSize = true;
@@ -182,6 +173,15 @@
             this.checkBoxIndexGroups.Size = new System.Drawing.Size(15, 14);
             this.checkBoxIndexGroups.TabIndex = 1;
             this.checkBoxIndexGroups.UseVisualStyleBackColor = true;
+            // 
+            // labelXmlSlammerIndexGroups
+            // 
+            this.labelXmlSlammerIndexGroups.AutoSize = true;
+            this.labelXmlSlammerIndexGroups.Location = new System.Drawing.Point(8, 19);
+            this.labelXmlSlammerIndexGroups.Name = "labelXmlSlammerIndexGroups";
+            this.labelXmlSlammerIndexGroups.Size = new System.Drawing.Size(73, 13);
+            this.labelXmlSlammerIndexGroups.TabIndex = 0;
+            this.labelXmlSlammerIndexGroups.Text = "Index Groups:";
             // 
             // XmlSlammerUserControl
             // 

@@ -37,6 +37,8 @@ namespace ContinuumXmlSlammer
 
         public void PI_Init(int nToolID, EngineInterface engineInterface, XmlElement pXmlProperties)
         {
+            DebugMessage($"PI_Init() Entering; ToolID={_toolID}");
+
             _toolID = nToolID;
             _engineInterface = engineInterface;
             _xmlProperties = pXmlProperties;
@@ -55,10 +57,13 @@ namespace ContinuumXmlSlammer
             }
 
             _outputHelper = new PluginOutputConnectionHelper(_toolID, _engineInterface);
+
+            DebugMessage($"PI_Init() Exiting; ToolID={_toolID}");
         }
 
         public IIncomingConnectionInterface PI_AddIncomingConnection(string pIncomingConnectionType, string pIncomingConnectionName)
         {
+            DebugMessage($"PI_AddIncomingConnection() has been called; Name={pIncomingConnectionName}");
             return this;
         }
 
@@ -66,11 +71,15 @@ namespace ContinuumXmlSlammer
         {
             // Add the outgoing connection to our PluginOutputConnectionHelper so it can manage it.
             _outputHelper.AddOutgoingConnection(outgoingConnection);
+
+            DebugMessage($"PI_AddOutgoingConnection() has been called; Name={pOutgoingConnectionName}");
             return true;
         }
 
         public bool PI_PushAllRecords(long nRecordLimit)
         {
+            // Should not be called
+            DebugMessage($"PI_PushAllRecords() has been called; THIS SHOULD NOT BE CALLED FOR A TOOL WITH AN INPUT CONNECTION!");
             return true;
         }
 
@@ -78,25 +87,35 @@ namespace ContinuumXmlSlammer
         {
             // Release any resources used by the control
             _outputHelper.Close();
+            DebugMessage("PI_Close() has been called; OutputHelper has been closed.");
         }
 
         public bool ShowDebugMessages()
         {
             // Return true to help us debug our tool. This should be set to false for general distribution.
-            return true;
+            #if DEBUG
+                return true;
+            #else
+                return false;      
+            #endif
         }
 
         public XmlElement II_GetPresortXml(XmlElement pXmlProperties)
         {
+            DebugMessage($"II_GetPresortXml() has been called");
+
             return null;
         }
 
         public bool II_Init(RecordInfo recordInfo)
         {
+            DebugMessage($"II_Init() Entering; ToolID={_toolID}");
+
             _recordInfoIn = recordInfo;
 
             prep();
 
+            DebugMessage($"II_Init() Exiting; ToolID={_toolID}; prep() should have completed.");
             return true;
         }
 
@@ -106,6 +125,8 @@ namespace ContinuumXmlSlammer
         // that was passed in to II_Init(), and (hopefully) cached.
         public bool II_PushRecord(AlteryxRecordInfoNet.RecordData recordDataIn)
         {
+            DebugMessage($"II_PushRecord() Entering; ToolID={_toolID}");
+
             // If we have no selected field, we can't continue.
             if (string.IsNullOrWhiteSpace(_selectedField)) return false;
 
@@ -144,6 +165,7 @@ namespace ContinuumXmlSlammer
                 }
             }
 
+            DebugMessage($"II_PushRecord() Exiting; ToolID={_toolID}");
             return true;
         }
 
@@ -181,10 +203,12 @@ namespace ContinuumXmlSlammer
 
             // Have the PluginOutputConnectionHelper ask the downstream tools to update their progress.
             _outputHelper.UpdateProgress(dPercent);
+            DebugMessage($"II_UpdateProgress() has been called; dPercent={dPercent}; ToolID={_toolID}");
         }
 
         public void II_Close()
         {
+            DebugMessage($"II_Close() has been called; ToolID={_toolID}");
         }
 
         private void prep()
@@ -268,5 +292,19 @@ namespace ContinuumXmlSlammer
             return false;
         }
 
+
+
+        //////////////////////// 
+        // Message Boilerplate
+
+        public void Message(string message, MessageStatus messageStatus = MessageStatus.STATUS_Info)
+        {
+            this._engineInterface?.OutputMessage(this._toolID, messageStatus, message);
+        }
+
+        public void DebugMessage(string message)
+        {
+            if (ShowDebugMessages()) this.Message(message);
+        }
     }
 }
