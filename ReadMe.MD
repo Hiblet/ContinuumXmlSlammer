@@ -191,7 +191,13 @@ Added checkbox to allow the choice to index repeating groups, or not.
 ### V 1.2.1 (Updated 18-JUL-2019)
 Diagnostic messaging elements added for Debug mode.  Should not effect functionality.
 
+### V 1.3.0 (Updated 18-JUL-2019 also)
+Output was resolving namespace prefixes so that myurl:name was resolved to {http://myurl.com}name, because xmlns:myurl="http://myurl.com" was defined.  Now the row is output with the unresolved text, which stops the rows filling with URL references whenever a namespace is used.  This change only effects docs with namespaces defined.
 
+### V 1.3.1 (Updated 08-JUN-2020)
+Declarations and Processing Instructions now handled.
+Default delimiters changed to Big/Little Squares.
+FIX: Declaration line was assumed to exist.  Calling ToString() on the declaration caused an exception.  
 
 
 ## Credits and Acknowledgements

@@ -26,11 +26,9 @@ namespace ContinuumXmlSlammer
         /// </summary>
         public static string GetAbsoluteXPath(this XElement element, bool indexGroups, string delimiter="/")
         {
-            if (element == null)
-            {
+            if (element == null)            
                 throw new ArgumentNullException("element");
-            }
-
+            
             Func<XElement, string> relativeXPath = e =>
             {
                 int index = e.IndexPosition();
@@ -40,15 +38,30 @@ namespace ContinuumXmlSlammer
                 string name;
                 if (String.IsNullOrEmpty(currentNamespace.ToString()))
                 {
+                    // No namespace
                     name = e.Name.LocalName;
                 }
                 else
                 {
+                    // There is a namespace;
+                    // It may or may not have a shorthand prefix
+
                     string namespacePrefix = e.GetPrefixOfNamespace(currentNamespace);
 
-                    name = String.IsNullOrEmpty(namespacePrefix) ?
-                        e.Name.LocalName :
-                        namespacePrefix + ":" + e.Name.LocalName;
+                    if (string.IsNullOrEmpty((namespacePrefix)))
+                    {
+                        // No prefix, use the fully qualified name
+                        name = e.Name.ToString();
+                        //name = "{" + currentNamespace.ToString() + "}" + e.Name.LocalName;
+                    }
+                    else
+                    {
+                        name = namespacePrefix + ":" + e.Name.LocalName;
+                    }
+
+                    //name = String.IsNullOrEmpty(namespacePrefix) ?
+                    //    e.Name.LocalName :
+                    //    namespacePrefix + ":" + e.Name.LocalName;
                 }
 
                 // If the element is the root or has no sibling elements, no index is required.
@@ -60,8 +73,7 @@ namespace ContinuumXmlSlammer
                         delimiter + name + delimiter + index.ToString();
                 }
                 else                
-                    return delimiter + name;
-                
+                    return delimiter + name;                
             };
 
             var ancestors = from e in element.Ancestors() select relativeXPath(e);

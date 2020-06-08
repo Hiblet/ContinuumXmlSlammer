@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using AlteryxRecordInfoNet;
+using System.Net;
 
 namespace ContinuumXmlSlammer
 {
@@ -30,7 +31,6 @@ namespace ContinuumXmlSlammer
         private string _attrDelimiter = Constants.DEFAULTATTRDELIMITER;
         private string _sIndexGroups = Constants.DEFAULTINDEXGROUPS;
         private bool _indexGroups = true;
-
 
 
 
@@ -131,19 +131,28 @@ namespace ContinuumXmlSlammer
             if (string.IsNullOrWhiteSpace(_selectedField)) return false;
 
             // Get the FieldBase for the "Input" data the contains the XML data.
-            FieldBase xmlFieldBase = _recordInfoIn.GetFieldByName(_selectedField, false);
+            FieldBase xmlFieldBase = null;
+            try { xmlFieldBase = _recordInfoIn.GetFieldByName(_selectedField, false); }
+            catch { return false; }
 
             // If that field doesn't exist, we can't continue.
             if (xmlFieldBase == null) return false;
 
             // Get the XML data from the current record.
-            string xmlText = xmlFieldBase.GetAsString(recordDataIn);
+            string xmlText = "";
+            try { xmlText = xmlFieldBase.GetAsString(recordDataIn); } catch { return false; }
+
+            if (string.IsNullOrEmpty(xmlText))
+                return false;
 
             // Load XML doc
             XDocument doc = XDocument.Parse(xmlText);
 
-            // If we haven't already done so, set up the output RecordInfo to describe the output data.
-            //prepRecordInfoOut();
+            // Write the XmlDeclarations
+            processDeclarations(doc,recordDataIn);
+
+            // Write the XmlProcessingInstructions
+            processPIs(doc, recordDataIn);
 
             // Walk the XML input.
             // Create one output record for each hierachy level.
@@ -154,12 +163,23 @@ namespace ContinuumXmlSlammer
                 string xPath = xElement.GetAbsoluteXPath(_indexGroups, _pathDelimiter); // The xml hierachy path
                 string textContent = xElement.ShallowValue().Trim(); // Value in the text node
 
+                // Text Content might be XML encode ie "You & yours" represented as "You &amp; yours".
+                // If this gets recoded to XML, this then becomes "You &amp;amp; yours".
+                if (!textContent.Contains("![CDATA["))
+                    textContent = System.Net.WebUtility.HtmlDecode(textContent);
+
                 pushRecord(xPath, textContent, recordDataIn);
 
                 foreach (XAttribute xAttribute in xElement.Attributes())
                 {
-                    string xPathAndAttribute = xPath + _attrDelimiter + xAttribute.Name;
-                    string attrContent = xAttribute.Value;
+                    string xPathAndAttribute = xPath + _attrDelimiter;
+
+                    var sAttribute = xAttribute.ToString(); // xmlns="url" | xmlns:pkg="url" | size="5"
+                    var parts = sAttribute.Split('=');
+
+                    xPathAndAttribute += parts[0];
+
+                    string attrContent = xAttribute.Value; // Could be parts 1
 
                     pushRecord(xPathAndAttribute, attrContent, recordDataIn);
                 }
@@ -263,9 +283,54 @@ namespace ContinuumXmlSlammer
             _recordInfoOut.AddField("Value", FieldType.E_FT_V_WString, Constants.LARGEOUTPUTFIELDSIZE, 0, "", "");
         }
 
+        /// <summary>
+        /// Write the Declarations data as the first three rows
+        /// </summary>
+        /// <param name="xDoc"></param>
+        /// <param name="recordDataIn"></param>
+        private void processDeclarations(XDocument xDoc, RecordData recordDataIn)
+        {
+            string xRootPath = xDoc.Root.GetAbsoluteXPath(_indexGroups, _pathDelimiter); // The xml hierachy path
+
+            string sXmlDecl_Version = xDoc.Declaration?.Version?.ToString() ?? "";
+            if (string.IsNullOrEmpty(sXmlDecl_Version))
+                sXmlDecl_Version = Constants.XML_Version_DEFAULT;
+            pushRecord(xRootPath + _pathDelimiter + Constants.XML_DECL + _attrDelimiter + Constants.XML_Version,
+                sXmlDecl_Version, recordDataIn);
+
+            string sXmlDecl_Encoding = xDoc.Declaration?.Encoding?.ToString() ?? "";
+            if (string.IsNullOrEmpty(sXmlDecl_Encoding))
+                sXmlDecl_Encoding = Constants.XML_Encoding_DEFAULT;
+            pushRecord(xRootPath + _pathDelimiter + Constants.XML_DECL + _attrDelimiter + Constants.XML_Encoding, 
+                sXmlDecl_Encoding, recordDataIn);
+
+            string sXmlDecl_Standalone = xDoc.Declaration?.Standalone?.ToString() ?? "";
+            if (string.IsNullOrEmpty(sXmlDecl_Standalone))
+                sXmlDecl_Standalone = Constants.XML_Standalone_DEFAULT;
+            pushRecord(xRootPath + _pathDelimiter + Constants.XML_DECL + _attrDelimiter + Constants.XML_Standalone,
+                sXmlDecl_Standalone, recordDataIn);
+        }
+
+        // Credit: https://stackoverflow.com/questions/42790439/retrieve-processing-instructions-using-xdocument
+        private void processPIs(XDocument xDoc, RecordData recordDataIn)
+        {
+            string xRootPath = xDoc.Root.GetAbsoluteXPath(_indexGroups, _pathDelimiter); // The xml hierachy path
+
+            var pI_nodes = xDoc.Nodes().OfType<XProcessingInstruction>();
+            foreach (var pI_node in pI_nodes)
+            {
+                // Each pI_node is an XNode.
+                // Value held is .Data
+                string sTarget = pI_node.Target;
+                string sData = pI_node.Data;
+                pushRecord(xRootPath + _pathDelimiter + Constants.XML_PI + _attrDelimiter + sTarget, 
+                    pI_node.Data, recordDataIn);
+            }
+        }
 
         //////////// 
         // HELPERS
+
 
         private void getConfigSetting(XmlElement configElement, string key, ref string memberToSet)
         {
