@@ -40,7 +40,7 @@ The output is intentionally modelled on the output of the Alteryx JSON Parse too
 
 Once you get to the stage where you have a compiled DLL, you are almost there.  If you do not want to get there, I can upload a copy of the compiled DLL to you on request, or email it, or whatever you like.
 
-The DLL is then copied to "C:\Program Files\Alteryx\bin\Plugins\ContinuumXMLSlammer" on your local installation.  
+The DLL is then copied to "C:\Program Files\Alteryx\bin\Plugins\ContinuumXMLSlammer" on your local installation.  NOTE! Windows will block DLLs from the Internet, so once the DLL is on your PC, right click it, select "Show More Options", select "Properties", and on the General tab at the bottom you may see "This file came from another computer and might be blocked to help protect this computer.  Here there is a checkbox without a checkmark (tick) in it called Unblock.  Check the checkbox to unblock the DLL, otherwise Windows will refuse to let it work.
 
 Next, you need an INI file in "C:\Program Files\Alteryx\Settings\AdditionalPlugIns".  The INI file is included in this repo, so you can copy it to your local folder.  The INI file has the path info that Alteryx needs to find the DLL, and the ToolGroup that the tool should appear in, in this case "Developer".
 
